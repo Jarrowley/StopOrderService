@@ -1,0 +1,10 @@
+/home/jdl/Code/StopWorkOrder/src/main/java/com/stopworkorder/repository/CompanyRecordRepository.java
+/home/jdl/Code/StopWorkOrder/src/main/java/com/stopworkorder/model/CompanyRecord.java
+/home/jdl/Code/StopWorkOrder/src/main/java/com/stopworkorder/config/MailConfig.java
+/home/jdl/Code/StopWorkOrder/src/main/java/com/stopworkorder/service/ScraperService.java
+/home/jdl/Code/StopWorkOrder/src/main/java/com/stopworkorder/scheduler/ScheduledScraper.java
+/home/jdl/Code/StopWorkOrder/src/main/java/com/stopworkorder/config/SchedulerEnableConfig.java
+/home/jdl/Code/StopWorkOrder/src/main/java/com/stopworkorder/service/CompanyRecordService.java
+/home/jdl/Code/StopWorkOrder/src/main/java/com/stopworkorder/StopWorkOrderApplication.java
+/home/jdl/Code/StopWorkOrder/src/main/java/com/stopworkorder/property/SchedulerProperties.java
+/home/jdl/Code/StopWorkOrder/src/main/java/com/stopworkorder/service/EmailService.java

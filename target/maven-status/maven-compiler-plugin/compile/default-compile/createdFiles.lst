@@ -1,0 +1,10 @@
+com/stopworkorder/service/ScraperService.class
+com/stopworkorder/service/EmailService.class
+com/stopworkorder/StopWorkOrderApplication.class
+com/stopworkorder/scheduler/ScheduledScraper.class
+com/stopworkorder/repository/CompanyRecordRepository.class
+com/stopworkorder/service/CompanyRecordService.class
+com/stopworkorder/model/CompanyRecord.class
+com/stopworkorder/config/SchedulerEnableConfig.class
+com/stopworkorder/property/SchedulerProperties.class
+com/stopworkorder/config/MailConfig.class

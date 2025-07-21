@@ -43,7 +43,7 @@ public class ScraperService {
                     continue;
                 }
                 
-                String companyNumber = lookupAbnByCompanyName(companyName);
+                String companyNumber = "ABN"; //lookupAbnByCompanyName(companyName);
                 String dateStr = item.findElement(By.className("nsw-list-item__info")).getText();
                 LocalDate dateAdded = LocalDate.parse(dateStr, DATE_FORMATTER); // Parse with custom format
                 CompanyRecord company = new CompanyRecord();
@@ -57,10 +57,9 @@ public class ScraperService {
         }
         return companies;
     }
-
+   
     private String lookupAbnByCompanyName(String companyName) {
-        // Use Selenium to search ABN Lookup and extract the ABN from the first result
-        String abnLookupUrl = "https://abr.business.gov.au/search?q=" + companyName.replace(" ", "+");
+        String abnLookupUrl = "https://abr.business.gov.au/Search/ResultsActive?SearchText=" + companyName.replace(" ", "+");
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--headless=new");
         options.addArguments("--no-sandbox");
@@ -68,12 +67,29 @@ public class ScraperService {
         WebDriver driver = new ChromeDriver(options);
         try {
             driver.get(abnLookupUrl);
-            // The ABN is usually in a span with class "search-results__abn"
-            List<WebElement> abnElements = driver.findElements(By.cssSelector(".search-results__abn"));
-            if (!abnElements.isEmpty()) {
-                String abnText = abnElements.get(0).getText();
-                // ABN is usually in the format "ABN 12 345 678 901"
-                return abnText.replace("ABN", "").replaceAll("\\s+", "");
+            // Find all table rows in the results
+            List<WebElement> rows = driver.findElements(By.tagName("tr"));
+            for (WebElement row : rows) {
+                List<WebElement> tds = row.findElements(By.tagName("td"));
+                if (tds.size() < 2) continue; // Need at least company and ABN columns
+                boolean foundCompany = false;
+                String abn = "";
+                for (WebElement td : tds) {
+                    String tdText = td.getText().trim();
+                    if (tdText.equalsIgnoreCase(companyName)) {
+                        foundCompany = true;
+                    }
+                }
+                if (foundCompany) {
+                    // Try to find ABN in the same row
+                    for (WebElement td : tds) {
+                        String tdText = td.getText().trim();
+                        if (tdText.matches("^(ABN\\s*)?\\d{2}\\s?\\d{3}\\s?\\d{3}\\s?\\d{3}$")) {
+                            abn = tdText.replace("ABN", "").replaceAll("\\s+", "");
+                            return abn;
+                        }
+                    }
+                }
             }
         } catch (Exception e) {
             log.error("Error looking up ABN for company: {}", companyName, e);
