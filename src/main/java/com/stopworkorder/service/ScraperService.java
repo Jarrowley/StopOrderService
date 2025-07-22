@@ -1,15 +1,5 @@
 package com.stopworkorder.service;
 
-import com.stopworkorder.model.CompanyRecord;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
-import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.http.ResponseEntity;
-import lombok.extern.slf4j.Slf4j;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -17,10 +7,21 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.springframework.stereotype.Service;
+
+import com.stopworkorder.model.CompanyRecord;
+
+import lombok.extern.slf4j.Slf4j;
+
 @Service
 @Slf4j
 public class ScraperService {
-    private static final String TARGET_URL = "https://www.nsw.gov.au/departments-and-agencies/building-commission/register-of-building-work-orders";
+    private static final String TARGET_URL = "https://www.nsw.gov.au/departments-and-agencies/building-commission/register-of-building-work-orders?page=2";
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("d MMMM yyyy");
 
     public List<CompanyRecord> scrape() {
@@ -43,7 +44,7 @@ public class ScraperService {
                     continue;
                 }
                 
-                String companyNumber = "ABN"; //lookupAbnByCompanyName(companyName);
+                String companyNumber = lookupAbnByCompanyName(companyName);
                 String dateStr = item.findElement(By.className("nsw-list-item__info")).getText();
                 LocalDate dateAdded = LocalDate.parse(dateStr, DATE_FORMATTER); // Parse with custom format
                 CompanyRecord company = new CompanyRecord();
@@ -58,8 +59,8 @@ public class ScraperService {
         return companies;
     }
    
-    private String lookupAbnByCompanyName(String companyName) {
-        String abnLookupUrl = "https://abr.business.gov.au/Search/ResultsActive?SearchText=" + companyName.replace(" ", "+");
+    public String lookupAbnByCompanyName(String companyName) {
+        String abnLookupUrl = "https://abr.business.gov.au/Search/ResultsAll?SearchText=" + companyName.replace(" ", "+");
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--headless=new");
         options.addArguments("--no-sandbox");
@@ -78,14 +79,15 @@ public class ScraperService {
                     String tdText = td.getText().trim();
                     if (tdText.equalsIgnoreCase(companyName)) {
                         foundCompany = true;
+                        break;
                     }
                 }
                 if (foundCompany) {
                     // Try to find ABN in the same row
                     for (WebElement td : tds) {
                         String tdText = td.getText().trim();
-                        if (tdText.matches("^(ABN\\s*)?\\d{2}\\s?\\d{3}\\s?\\d{3}\\s?\\d{3}$")) {
-                            abn = tdText.replace("ABN", "").replaceAll("\\s+", "");
+                        if (tdText.matches("^\\d{2}\\s?\\d{3}\\s?\\d{3}\\s?\\d{3}\\s*Active$")) {
+                            abn = tdText.replace("Active", "").replaceAll("\\s+", "");
                             return abn;
                         }
                     }

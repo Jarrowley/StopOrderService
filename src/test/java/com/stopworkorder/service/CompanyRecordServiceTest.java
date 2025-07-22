@@ -1,17 +1,25 @@
 package com.stopworkorder.service;
 
-import com.stopworkorder.property.SchedulerProperties;
-import com.stopworkorder.model.CompanyRecord;
-import com.stopworkorder.repository.CompanyRecordRepository;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Mockito;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.Optional;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import com.stopworkorder.model.CompanyRecord;
+import com.stopworkorder.property.SchedulerProperties;
+import com.stopworkorder.repository.CompanyRecordRepository;
 
 class CompanyRecordServiceTest {
     private CompanyRecordRepository repository;
