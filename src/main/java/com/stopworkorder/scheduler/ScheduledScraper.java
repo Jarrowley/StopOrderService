@@ -1,12 +1,13 @@
 package com.stopworkorder.scheduler;
 
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
+
 import com.stopworkorder.property.SchedulerProperties;
 import com.stopworkorder.service.CompanyRecordService;
 import com.stopworkorder.service.ScraperService;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
-import jakarta.annotation.PostConstruct;
 
 @Component
 @RequiredArgsConstructor
@@ -19,4 +20,4 @@ public class ScheduledScraper {
     public void runScraper() {
         companyRecordService.processNewCompanies(scraperService.scrape());
     }
-} 
+}

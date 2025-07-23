@@ -22,6 +22,7 @@ mail:
           enable: true
 
 notification:
+  web-url: "https://www.nsw.gov.au/departments-and-agencies/building-commission/register-of-building-work-orders?page=2"
   cron: "0 9-17 * * MON-FRI" 
   recipients:
     - example@example.com
