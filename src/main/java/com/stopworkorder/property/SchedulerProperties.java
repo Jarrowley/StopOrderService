@@ -11,6 +11,7 @@ import lombok.Setter;
 @Component
 @ConfigurationProperties(prefix = "notification")
 public class SchedulerProperties {
+    private String webUrl;
     private String cron;
     private List<String> recipients;
 } 

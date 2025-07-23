@@ -7,13 +7,17 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.stopworkorder.property.SchedulerProperties;
+
 @ExtendWith(MockitoExtension.class)
 class ScraperServiceTest {
     private ScraperService scraperService;
 
     @BeforeEach
     void setUp() {
-        scraperService = new ScraperService();
+        SchedulerProperties schedulerProperties = new SchedulerProperties();
+        schedulerProperties.setWebUrl("https://www.nsw.gov.au/departments-and-agencies/building-commission/register-of-building-work-orders?page=2");
+        scraperService = new ScraperService(schedulerProperties);
     }
 
     @Test

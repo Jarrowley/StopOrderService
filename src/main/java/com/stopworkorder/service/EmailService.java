@@ -35,7 +35,7 @@ public class EmailService {
             message.setSubject(subject);
             message.setText(body);
             log.info("body: {}", body);
-            //mailSender.send(message);
+            mailSender.send(message);
             log.info("Sent email to {}: {}", recipient, subject);
         }
     }

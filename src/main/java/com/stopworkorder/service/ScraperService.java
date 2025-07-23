@@ -15,14 +15,17 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.stereotype.Service;
 
 import com.stopworkorder.model.CompanyRecord;
+import com.stopworkorder.property.SchedulerProperties;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class ScraperService {
-    private static final String TARGET_URL = "https://www.nsw.gov.au/departments-and-agencies/building-commission/register-of-building-work-orders?page=2";
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("d MMMM yyyy");
+    private final SchedulerProperties schedulerProperties;
 
     public List<CompanyRecord> scrape() {
         List<CompanyRecord> companies = new ArrayList<>();
@@ -32,7 +35,7 @@ public class ScraperService {
         options.addArguments("--disable-dev-shm-usage");
         WebDriver driver = new ChromeDriver(options);
         try {
-            driver.get(TARGET_URL);
+            driver.get(schedulerProperties.getWebUrl());
             List<WebElement> items = driver.findElements(By.className("nsw-list-item__content"));
             for (WebElement item : items) {
                 // Example parsing logic, adjust selectors as needed
